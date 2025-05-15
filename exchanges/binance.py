@@ -23,8 +23,7 @@ def get_usd_orderbook(coin: str, currency: str = "USDT") -> ExchangeDataResponse
         
         response.raise_for_status()
         data = response.json()
-        print("Binance raw response:", response.text)
-
+        
         if "bids" in data and "asks" in data and data["bids"] and data["asks"]:
             best_bid_price = float(data["bids"][0][0])
             best_ask_price = float(data["asks"][0][0])
