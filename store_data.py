@@ -46,6 +46,6 @@ def insert_opportunity(opportunity, is_best=False, timestamp=None):
     response = supabase.table("arbitrage_opportunities").insert(data).execute()
 
     if response.data:
-        print(f"[✔] Inserted opportunity for {opportunity['coin']}")
+        print(f"Inserted opportunity for {opportunity['coin']}")
     else:
-        print(f"[✖] Insert failed for {opportunity['coin']}: {response.error}")
+        print(f"Insert failed for {opportunity['coin']}: {response.error}")
