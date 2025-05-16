@@ -1,4 +1,4 @@
-name: Run Arbitrage Script with OpenVPN
+name: Run Arbitrage Script
 
 on:
   schedule:
@@ -13,9 +13,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install OpenVPN
-        run: sudo apt-get update && sudo apt-get install -y openvpn
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -26,33 +23,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Save OpenVPN config file
-        run: echo "${{ secrets.OPENVPN_CONFIG }}" > vpnconfig.ovpn
-
-      # If your VPN uses username/password, create the auth file:
-      - name: Create VPN auth file
-        if: ${{ secrets.OPENVPN_USERNAME && secrets.OPENVPN_PASSWORD }}
-        run: |
-          echo "${{ secrets.OPENVPN_USERNAME }}" > vpn-auth.txt
-          echo "${{ secrets.OPENVPN_PASSWORD }}" >> vpn-auth.txt
-
-      # Modify your vpnconfig.ovpn to include:
-      # auth-user-pass vpn-auth.txt
-      # (Do this only if your config requires user/pass)
-      - name: Modify VPN config for auth-user-pass
-        if: ${{ secrets.OPENVPN_USERNAME && secrets.OPENVPN_PASSWORD }}
-        run: |
-          echo "auth-user-pass vpn-auth.txt" >> vpnconfig.ovpn
-
-      - name: Connect to VPN
-        run: sudo openvpn --config vpnconfig.ovpn --daemon
-
-      - name: Wait for VPN connection
-        run: sleep 15
-
-      - name: Verify VPN connection IP
-        run: curl https://ifconfig.me
-
       - name: Run arbitrage script
         env:
           EXCHANGE_RATE_API_KEY: ${{ secrets.EXCHANGE_RATE_API_KEY }}
@@ -61,6 +31,3 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python arbitrage_runner.py
-
-      - name: Disconnect VPN
-        run: sudo pkill openvpn
