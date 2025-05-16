@@ -9,7 +9,7 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
 
     # Define quote currencies
     exchange_quote_currency = {
-        "Binance": "USD",
+        "Kraken": "USD",
         "Independent Reserve": "SGD",
         "CoinSwitch": "INR"
     }
