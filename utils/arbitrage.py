@@ -44,24 +44,33 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
             else:
                 sell_price_in_inr = sell_price
 
-            # Sanity check: prevent division by tiny amounts
-            if buy_price_in_inr < 1e-6:
+            # Skip if prices are invalid
+            if buy_price_in_inr < 1e-6 or sell_price_in_inr < 1e-6:
                 continue
 
+            # Calculate profit and percentage
             profit = sell_price_in_inr - buy_price_in_inr
             profit_percentage = (profit / buy_price_in_inr) * 100
+
+            # Apply filtering for noise
+            if profit <= 0 or profit_percentage <= 0:
+                continue
+
+            # skip opportunities below ₹0.00001 or 0.1%
+            if profit < 0.00001 or profit_percentage < 0.1:
+                continue
 
             opportunity = {
                 "coin": coin,
                 "buy_from": buy.exchange,
                 "sell_to": sell.exchange,
-                "buy_price_original": round(buy_price, 7),
-                "buy_price_in_inr": round(buy_price_in_inr, 7),
+                "buy_price_original": round(buy_price, 8),
+                "buy_price_in_inr": round(buy_price_in_inr, 8),
                 "buy_original_currency": buy_currency,
-                "sell_price_original": round(sell_price, 7),
-                "sell_price_in_inr": round(sell_price_in_inr, 7),
+                "sell_price_original": round(sell_price, 8),
+                "sell_price_in_inr": round(sell_price_in_inr, 8),
                 "sell_original_currency": sell_currency,
-                "profit_in_inr": round(profit, 4),
+                "profit_in_inr": round(profit, 6),
                 "profit_percentage": round(profit_percentage, 4),
             }
 
