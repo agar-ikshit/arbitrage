@@ -18,6 +18,9 @@ def get_sgd_orderbook(coin: str, currency: str = "SGD") -> ExchangeDataResponse 
         best_bid = float(data["CurrentHighestBidPrice"])
         best_ask = float(data["CurrentLowestOfferPrice"])
 
+
+        print(response)
+
         return ExchangeDataResponse(
             exchange="Independent Reserve",
             symbol=f"{coin.upper()}/{currency.upper()}",
