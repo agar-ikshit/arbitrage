@@ -2,7 +2,7 @@ name: Run Arbitrage Script
 
 on:
   schedule:
-    - cron: "*/20 * * * *"  
+    - cron: "*/6 * * * *"  
   workflow_dispatch:        
 
 jobs:
