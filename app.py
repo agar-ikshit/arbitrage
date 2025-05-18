@@ -1,7 +1,5 @@
 from fastapi import FastAPI, Query
 from concurrent.futures import ThreadPoolExecutor
-
-
 from exchanges.models import ExchangeDataResponse
 from exchanges.kraken import get_usd_orderbook as fetch_kraken
 from exchanges.independent_reserve import get_sgd_orderbook as fetch_independent
@@ -14,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Or ["*"] to allow all origins (not recommended for prod)
+    allow_origins=["http://localhost:5173"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
