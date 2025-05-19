@@ -86,8 +86,7 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
             net_profit = net_sell_price_inr - net_buy_price_inr
             net_profit_percentage = (net_profit / net_buy_price_inr) * 100 if net_buy_price_inr else -float('inf')
 
-            if net_profit <= 0 or net_profit_percentage <= 0:
-                continue
+            
 
             opportunity = {
                 "coin": coin,
@@ -108,8 +107,8 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
 
             all_opportunities.append(opportunity)
 
-            if net_profit_percentage > best_profit:
-                best_profit = net_profit_percentage
+            if gross_profit_percentage > best_profit:
+                best_profit = gross_profit_percentage
                 best_opportunity = opportunity
 
     return best_opportunity, all_opportunities
