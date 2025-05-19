@@ -1,6 +1,6 @@
 import socketio
 import time
-from .models import ExchangeDataResponse  # Make sure this has quantity fields
+from .models import ExchangeDataResponse 
 
 base_url = "wss://ws.coinswitch.co/"
 namespace = "/coinswitchx"

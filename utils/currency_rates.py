@@ -50,7 +50,7 @@ def get_exchange_rate(base_currency, target_currency):
     return data["rates"][target_currency]
 
 def calculate_rates():
-    # Get SGD to INR and USD to INR directly
+   
     sgd_inr = get_exchange_rate("SGD", "INR")
     usd_inr = get_exchange_rate("USD", "INR")
 
@@ -59,7 +59,7 @@ def calculate_rates():
         "USD/INR": usd_inr
     }
 
-# Uncomment to test
+
 # try:
 #     rates = calculate_rates()
 #     print(f"Exchange Rates:\nSGD/INR: {rates['SGD/INR']}\nUSD/INR: {rates['USD/INR']}")

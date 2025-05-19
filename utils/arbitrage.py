@@ -43,7 +43,7 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
             if buy_price_in_inr < 1e-6 or sell_price_in_inr < 1e-6:
                 continue
 
-            # Calculate gross profit and percentage
+            #gross profit and percentage
             gross_profit = sell_price_in_inr - buy_price_in_inr
             gross_profit_percentage = (gross_profit / buy_price_in_inr) * 100
 
@@ -53,14 +53,13 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
             if gross_profit < 0.00001 or gross_profit_percentage < 0.1:
                 continue
 
-            # Calculate fees
             buy_fee_percent = FEE_CONFIG.get(buy.exchange, {}).get("taker_fee_percent", 0) / 100
             sell_fee_percent = FEE_CONFIG.get(sell.exchange, {}).get("taker_fee_percent", 0) / 100
 
             buy_withdraw_fee_coin = FEE_CONFIG.get(buy.exchange, {}).get("withdrawal_fee", {}).get(coin, 0) or 0
             sell_withdraw_fee_coin = FEE_CONFIG.get(sell.exchange, {}).get("withdrawal_fee", {}).get(coin, 0) or 0
 
-            # Convert withdrawal fees to INR (using buy currency for buy withdrawal, sell currency for sell withdrawal)
+            # Convert withdrawal fees to INR buy currency-buy withdrawal sell currency-sell withdrawal)
             def convert_withdraw_fee_to_inr(exchange, currency, fee_coin):
                 if fee_coin == 0:
                     return 0
@@ -71,12 +70,12 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
                 elif currency == "INR":
                     return fee_coin
                 else:
-                    return fee_coin  # fallback
+                    return fee_coin  
 
             buy_withdraw_fee_inr = convert_withdraw_fee_to_inr(buy.exchange, buy_currency, buy_withdraw_fee_coin)
             sell_withdraw_fee_inr = convert_withdraw_fee_to_inr(sell.exchange, sell_currency, sell_withdraw_fee_coin)
 
-            # Estimate net buy cost: buy price + taker fee + withdrawal fee
+            # ESTIMATE net buy cost: buy price + taker fee + withdrawal fee
             # Taker fee on buy is on the purchase amount
             net_buy_price_inr = buy_price_in_inr * (1 + buy_fee_percent) + buy_withdraw_fee_inr
 

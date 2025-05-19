@@ -13,7 +13,7 @@ for coin in coins:
 
     while attempt < 3:
         try:
-            result = main(coin)  # result can be dict or JSON string
+            result = main(coin)  
             print(f"[DEBUG] Raw response for {coin}: {result}")
 
             if isinstance(result, str):
