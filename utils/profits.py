@@ -14,12 +14,10 @@ from utils.arbitrage import find_best_arbitrage_opportunity
 
 def fetch_all_data(coin: str):
     with ThreadPoolExecutor() as executor:
-        # Launch calls concurrently, respecting currency for each exchange
         future_kraken = executor.submit(fetch_kraken, coin, "USDT")
-        future_independent = executor.submit(fetch_independent, coin)  # assumes function updated to accept coin param
-        future_coinswitch = executor.submit(fetch_coinswitch, coin)    # also updated to accept coin param
+        future_independent = executor.submit(fetch_independent, coin)  
+        future_coinswitch = executor.submit(fetch_coinswitch, coin)    
 
-        # Gather results
         kraken_data = future_kraken.result()
         independent_data = future_independent.result()
         coinswitch_data = future_coinswitch.result()
@@ -27,16 +25,13 @@ def fetch_all_data(coin: str):
     return [kraken_data, independent_data, coinswitch_data]
 
 def main(coin="XRP"):
-    # 1) Fetch all data concurrently
     exchange_data = fetch_all_data(coin)
+    
 
-    # 2) Fetch exchange rates
     rates = calculate_rates()
 
-    # 3) Compute arbitrage
     best, all_ops = find_best_arbitrage_opportunity(exchange_data, rates,coin)
 
-    # 4) Build JSON response
     response = {
         "best_arbitrage_opportunity": best,
         "all_arbitrage_opportunities": sorted(all_ops, key=lambda x: x['profit_percentage'], reverse=True)
@@ -47,7 +42,7 @@ def main(coin="XRP"):
 if __name__ == "__main__":
     try:
         while True:
-            result = main()  # You can pass different coins here if you want
+            result = main()  
             print(result)
             time.sleep(1)
     except KeyboardInterrupt:

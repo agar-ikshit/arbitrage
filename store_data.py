@@ -35,9 +35,11 @@ def insert_opportunity(opportunity, is_best=False, timestamp=None):
         "buy_price_in_inr": opportunity["buy_price_in_inr"],
         "buy_original_currency": opportunity["buy_original_currency"],
         "sell_price_original": opportunity["sell_price_original"],
+        "buy_quantity": opportunity.get("buy_quantity"), 
         "sell_price_in_inr": opportunity["sell_price_in_inr"],
         "sell_original_currency": opportunity["sell_original_currency"],
         "profit_in_inr": opportunity["profit_in_inr"],
+        "sell_quantity": opportunity.get("sell_quantity"), 
         "profit_percentage": opportunity["profit_percentage"],
         "is_best": is_best,
         "timestamp": timestamp  # manually setting same timestamp

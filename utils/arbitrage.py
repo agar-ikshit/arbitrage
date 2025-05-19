@@ -67,9 +67,11 @@ def find_best_arbitrage_opportunity(exchanges, exchange_rates, coin):
                 "buy_price_original": round(buy_price, 8),
                 "buy_price_in_inr": round(buy_price_in_inr, 8),
                 "buy_original_currency": buy_currency,
+                "buy_quantity": round(getattr(buy, "best_ask_quantity", 0), 8),
                 "sell_price_original": round(sell_price, 8),
                 "sell_price_in_inr": round(sell_price_in_inr, 8),
                 "sell_original_currency": sell_currency,
+                "sell_quantity": round(getattr(sell, "best_bid_quantity", 0), 8),
                 "profit_in_inr": round(profit, 6),
                 "profit_percentage": round(profit_percentage, 4),
             }

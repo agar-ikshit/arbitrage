@@ -1,13 +1,11 @@
 import socketio
 import time
-from .models import ExchangeDataResponse
+from .models import ExchangeDataResponse  # Make sure this has quantity fields
 
 base_url = "wss://ws.coinswitch.co/"
 namespace = "/coinswitchx"
 socketio_path = "/pro/realtime-rates-socket/spot/coinswitchx"
 EVENT_NAME = "FETCH_ORDER_BOOK_CS_PRO"
-
-
 
 def get_inr_orderbook(coin: str) -> ExchangeDataResponse | None:
     pair = f"{coin.upper()},INR"
@@ -24,12 +22,17 @@ def get_inr_orderbook(coin: str) -> ExchangeDataResponse | None:
 
             if best_bid and best_ask:
                 best_bid_price = float(best_bid[0])
+                best_bid_quantity = float(best_bid[1])
                 best_ask_price = float(best_ask[0])
+                best_ask_quantity = float(best_ask[1])
+
                 exchange_data = ExchangeDataResponse(
                     exchange="CoinSwitch",
                     symbol=pair,
                     best_bid_price=best_bid_price,
-                    best_ask_price=best_ask_price
+                    best_bid_quantity=best_bid_quantity,
+                    best_ask_price=best_ask_price,
+                    best_ask_quantity=best_ask_quantity
                 )
                 sio.disconnect()
 
@@ -52,7 +55,6 @@ def get_inr_orderbook(coin: str) -> ExchangeDataResponse | None:
 
     return exchange_data if exchange_data else None
 
-
-
 if __name__ == "__main__":
-    print(get_inr_orderbook("BTC"))
+    result = get_inr_orderbook("BTC")
+    print(result.to_json() if result else "No data")
