@@ -39,7 +39,7 @@ def main(coin: str):
 
     response = {
         "best_arbitrage_opportunity": best,
-        "all_arbitrage_opportunities": sorted(all_ops, key=lambda x: x['profit_percentage'], reverse=True)
+        "all_arbitrage_opportunities": sorted(all_ops, key=lambda x: x['profit_percentage_before_fees'], reverse=True)
     }
 
     return response

@@ -14,19 +14,29 @@ def store_to_supabase(data):
     best = data.get("best_arbitrage_opportunity")
     all_ops = data.get("all_arbitrage_opportunities", [])
 
-    # Generate a single timestamp for this run
     run_timestamp = datetime.utcnow().isoformat()
 
-    # Store best opportunity if it's profitable
-    if best and best["profit_percentage"] > 0:
-        insert_opportunity(best, is_best=True, timestamp=run_timestamp)
+    if best and best.get("profit_percentage_before_fees", 0) > 0:
+        insert_opportunity(
+            best,
+            is_best=True,
+            timestamp=run_timestamp,
+            profit_percentage_before_fees=best["profit_percentage_before_fees"],
+            profit_percentage_after_fees=best.get("profit_percentage_after_fees")
+        )
 
-    # Store other profitable opportunities
     for op in all_ops:
-        if op["profit_percentage"] > 0 and op != best:
-            insert_opportunity(op, is_best=False, timestamp=run_timestamp)
+        if op.get("profit_percentage_before_fees", 0) > 0 and op != best:
+            insert_opportunity(
+                op,
+                is_best=False,
+                timestamp=run_timestamp,
+                profit_percentage_before_fees=op["profit_percentage_before_fees"],
+                profit_percentage_after_fees=op.get("profit_percentage_after_fees")
+            )
 
-def insert_opportunity(opportunity, is_best=False, timestamp=None):
+def insert_opportunity(opportunity, is_best=False, timestamp=None,
+                       profit_percentage_before_fees=None, profit_percentage_after_fees=None):
     data = {
         "coin": opportunity["coin"],
         "buy_from": opportunity["buy_from"],
@@ -34,15 +44,16 @@ def insert_opportunity(opportunity, is_best=False, timestamp=None):
         "buy_price_original": opportunity["buy_price_original"],
         "buy_price_in_inr": opportunity["buy_price_in_inr"],
         "buy_original_currency": opportunity["buy_original_currency"],
+        "buy_quantity": opportunity.get("buy_quantity"),
         "sell_price_original": opportunity["sell_price_original"],
-        "buy_quantity": opportunity.get("buy_quantity"), 
         "sell_price_in_inr": opportunity["sell_price_in_inr"],
         "sell_original_currency": opportunity["sell_original_currency"],
+        "sell_quantity": opportunity.get("sell_quantity"),
         "profit_in_inr": opportunity["profit_in_inr"],
-        "sell_quantity": opportunity.get("sell_quantity"), 
-        "profit_percentage": opportunity["profit_percentage"],
+        "profit_percentage_before_fees": round(profit_percentage_before_fees, 4) if profit_percentage_before_fees is not None else None,
+        "profit_percentage_after_fees": round(profit_percentage_after_fees, 4) if profit_percentage_after_fees is not None else None,
         "is_best": is_best,
-        "timestamp": timestamp  # manually setting same timestamp
+        "timestamp": timestamp
     }
 
     response = supabase.table("arbitrage_opportunities").insert(data).execute()

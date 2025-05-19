@@ -26,7 +26,7 @@ def fetch_all_data(coin: str):
 
 def main(coin="XRP"):
     exchange_data = fetch_all_data(coin)
-    
+
 
     rates = calculate_rates()
 
@@ -34,7 +34,7 @@ def main(coin="XRP"):
 
     response = {
         "best_arbitrage_opportunity": best,
-        "all_arbitrage_opportunities": sorted(all_ops, key=lambda x: x['profit_percentage'], reverse=True)
+        "all_arbitrage_opportunities": sorted(all_ops, key=lambda x: x['profit_percentage_before_fees'], reverse=True)
     }
 
     return json.dumps(response, indent=4)
