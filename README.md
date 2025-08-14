@@ -103,22 +103,6 @@ Each run pushes opportunities into a Supabase table with:
 
 ---
 
-## 📂 Repository Structure
-.
-├── binance.py # Binance market data
-├── coinbase.py # Coinbase market data
-├── coinswitch.py # CoinSwitch market data
-├── independent_reserve.py # Independent Reserve market data
-├── kraken.py # Kraken market data
-├── exchange_rates.py # Fetches forex rates
-├── fee_config.py # Exchange fee settings
-├── models.py # Data models
-├── arbitrage.py # Arbitrage calculation logic
-└── .github/workflows/cron.yml # Automation config
-
-
----
-
 ## 📊 Example Best Opportunity
 **Scenario**: Buying TRX on Kraken (USD) and selling on CoinSwitch (INR).
 
